@@ -1,10 +1,10 @@
 # Desafio individual - Docker compose
 
-O desafio consiste em rodar uma aplicação bem simples através do *Docker Compose* utilizando uma imagem pública hospedada no *Docker Hub*.
+O desafio consiste em rodar uma aplicação bem simples utilizando o *Docker Compose*. A imagem da aplicação deve estar no *Docker Hub* e deve ser pública.
 
 ## Como subir a aplicação?
 
-Para subir essa aplicação via Docker Compose, rode:
+Para subir a aplicação via Docker Compose, rode:
 
 ```bash
 docker compose up
