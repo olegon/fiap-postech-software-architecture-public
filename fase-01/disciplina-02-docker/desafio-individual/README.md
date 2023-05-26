@@ -17,3 +17,5 @@ Após subir a aplicação, rode:
 ```bash
 curl -i http://localhost:8080/v1/programming-languages
 ```
+
+Se tudo deu certo, você deve conseguir uma lista com algumas linguagens.
