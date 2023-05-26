@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  app:
+    image: olegon/fiap-soat-docker-challenge:latest
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
