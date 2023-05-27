@@ -23,3 +23,13 @@ docker compose -f docker-compose-dotnet.yml up
 # Testando a aplicação
 curl -i http://localhost:8080/v1/programming-languages
 ```
+
+### Versão node
+
+```bash
+# Subindo a aplicação
+docker compose -f docker-compose-node.yml up
+
+# Testando a aplicação
+curl -i http://localhost:8080/v1/programming-languages
+```
