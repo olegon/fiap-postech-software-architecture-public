@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  app:
+    image: olegon/fiap-soat-docker-dotnet-challenge:latest
+    restart: always
+    environment:
+      - CUSTOMCONNSTR_ProgrammingLanguageContext=Host=db;Database=postgres;Username=postgres;Password=postgres
+    ports:
+      - 8080:80
+    depends_on:
+      - db

@@ -5,8 +5,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
   app:
-    image: olegon/fiap-soat-docker-challenge:latest
+    image: olegon/fiap-soat-docker-spring-challenge:latest
     restart: always
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres

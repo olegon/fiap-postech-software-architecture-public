@@ -2,20 +2,24 @@
 
 O desafio consiste em rodar uma aplicação bem simples utilizando o *Docker Compose*. A imagem da aplicação deve estar no *Docker Hub* e deve ser pública.
 
-## Como subir a aplicação?
+## Como subir a aplicação e rodar a aplicação?
 
-Para subir a aplicação via Docker Compose, rode:
+### Versão Spring
 
 ```bash
-docker compose up
+# Subindo a aplicação
+docker compose -f docker-compose-spring.yml up
+
+# Testando a aplicação
+curl -i http://localhost:8080/v1/programming-languages
 ``` 
 
-## Como usar a aplicação?
-
-Após subir a aplicação, rode:
+### Versão dotnet
 
 ```bash
+# Subindo a aplicação
+docker compose -f docker-compose-dotnet.yml up
+
+# Testando a aplicação
 curl -i http://localhost:8080/v1/programming-languages
 ```
-
-Se tudo deu certo, você deve conseguir uma lista com algumas linguagens.

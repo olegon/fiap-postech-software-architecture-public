@@ -2,7 +2,8 @@ FROM maven:3-amazoncorretto-17 AS build
 
 WORKDIR /opt/app
 
-COPY app/ .
+COPY src ./src
+COPY pom.xml .
 
 RUN mvn package
 
