@@ -13,4 +13,6 @@ WORKDIR /opt/app
 
 COPY --from=build /opt/app/target/app*.jar app.jar
 
+USER nobody
+
 CMD [ "java", "-jar", "app.jar" ]

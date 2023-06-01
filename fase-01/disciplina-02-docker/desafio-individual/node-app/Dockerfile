@@ -10,4 +10,6 @@ COPY . .
 
 EXPOSE 8080
 
-CMD [ "npm", "start" ]
+USER nobody
+
+CMD [ "node", "index.mjs" ]

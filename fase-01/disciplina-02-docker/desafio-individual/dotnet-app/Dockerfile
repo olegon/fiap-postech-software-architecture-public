@@ -21,4 +21,6 @@ RUN ls -la .
 
 EXPOSE 80
 
+USER nobody
+
 ENTRYPOINT ["dotnet", "Olegon.Fiap.Soat.App.dll"]
