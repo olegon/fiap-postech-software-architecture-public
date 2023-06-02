@@ -13,6 +13,6 @@ services:
     environment:
       - CUSTOMCONNSTR_ProgrammingLanguageContext=Host=db;Database=postgres;Username=postgres;Password=postgres
     ports:
-      - 8080:80
+      - 8080:5000
     depends_on:
       - db

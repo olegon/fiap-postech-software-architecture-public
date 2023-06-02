@@ -15,11 +15,11 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 
 WORKDIR /opt/app
 
+ENV ASPNETCORE_URLS=http://+:5000
+
 COPY --from=build /publish ./
 
-RUN ls -la .
-
-EXPOSE 80
+EXPOSE 5000
 
 USER nobody
 
