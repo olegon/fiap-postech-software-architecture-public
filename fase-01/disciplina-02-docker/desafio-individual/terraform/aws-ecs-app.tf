@@ -25,10 +25,12 @@ resource "aws_ecs_task_definition" "app" {
         {
           containerPort = var.app_docker_port
         }
+      ],
+      environment = [
+        { "name" : "CUSTOMCONNSTR_ProgrammingLanguageContext", "value" : "Host=${module.db.db_instance_address};Database=postgres;Username=postgres;Password=postgres" }
       ]
     }
   ])
-
 }
 
 resource "aws_ecs_service" "app" {

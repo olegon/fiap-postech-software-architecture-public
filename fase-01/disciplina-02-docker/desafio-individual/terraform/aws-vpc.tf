@@ -1,6 +1,6 @@
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-  # version = "~> 5.0"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 5.0"
 
   name = "my-app-vpc"
   cidr = var.aws_vpc_cidr
@@ -26,8 +26,29 @@ resource "aws_security_group" "app" {
     # Why am I using [module.vpc.vpc_cidr_block] ?
     # NLB does not have SG, so I cant a trust a SG. (https://docs.aws.amazon.com/elasticloadbalancing/latest/network/target-group-register-targets.html#target-security-groups)
     # NLB needs to make healthchecks and there are ENIs on VPC, so Im trusting any communication within same VPC
-    cidr_blocks      = [module.vpc.vpc_cidr_block]
+    cidr_blocks = [module.vpc.vpc_cidr_block]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
+resource "aws_security_group" "db" {
+  name        = "my-db-sg"
+  description = "allows db traffic"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description = "db port"
+    from_port   = "5432"
+    to_port     = "5432"
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc.vpc_cidr_block]
   }
 
   egress {
