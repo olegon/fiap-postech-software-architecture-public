@@ -21,6 +21,7 @@ module "db" {
   create_random_password              = false
   password                            = "postgres"
   iam_database_authentication_enabled = false
+  skip_final_snapshot                 = true
 
   vpc_security_group_ids = [aws_security_group.db.id]
 
