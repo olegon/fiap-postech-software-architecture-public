@@ -8,7 +8,7 @@ module "db" {
   engine_version       = "14"
   family               = "postgres14"
   major_engine_version = "14"
-  instance_class       = "db.t4g.micro"
+  instance_class       = "db.t3.micro"
 
   allocated_storage     = 5
   max_allocated_storage = 10

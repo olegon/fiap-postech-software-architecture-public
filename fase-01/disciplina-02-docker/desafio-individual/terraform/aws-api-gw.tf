@@ -12,10 +12,32 @@ resource "aws_api_gateway_rest_api" "this" {
       version = "1.0"
     }
     paths = {
+      "/v1/sysops/ensure-database-created" = {
+        post = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "POST"
+            connectionType       = "VPC_LINK"
+            connectionId         = aws_api_gateway_vpc_link.this.id
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${module.elb.lb_dns_name}/v1/sysops/ensure-database-created"
+          }
+        }
+      }
       "/v1/programming-languages" = {
         get = {
           x-amazon-apigateway-integration = {
             httpMethod           = "GET"
+            connectionType       = "VPC_LINK"
+            connectionId         = aws_api_gateway_vpc_link.this.id
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${module.elb.lb_dns_name}/v1/programming-languages"
+          }
+        }
+        post = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "POST"
             connectionType       = "VPC_LINK"
             connectionId         = aws_api_gateway_vpc_link.this.id
             payloadFormatVersion = "1.0"

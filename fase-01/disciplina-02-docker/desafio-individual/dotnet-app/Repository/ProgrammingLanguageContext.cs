@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Olegon.Fiap.Soat.App.Entity;
+using Olegon.Fiap.Soat.App.Model;
 
 namespace Olegon.Fiap.Soat.App.Repository;
 
 public class ProgrammingLanguageContext : DbContext {
-    public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
+    public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; } = null!;
 
     public ProgrammingLanguageContext(DbContextOptions options) : base(options) { }
 
