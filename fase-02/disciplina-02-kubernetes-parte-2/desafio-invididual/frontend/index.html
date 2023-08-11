@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend</title>
+</head>
+
+<body>
+    <div id="my-result-container">Counter = -</div>
+    <button id="my-button">Count!</button>
+
+    <script>
+        const $button = document.getElementById('my-button');
+        const $result = document.getElementById('my-result-container');
+
+        async function updateCounter() {
+            const response = await fetch('http://localhost:3000/v1/count');
+            const { value } = await response.json();
+            $result.innerText = `Counter = ${value}`;
+        }
+
+        $button.addEventListener('click', (e) => {
+            updateCounter();
+        });
+
+        updateCounter();
+    </script>
+</body>
+
+</html>

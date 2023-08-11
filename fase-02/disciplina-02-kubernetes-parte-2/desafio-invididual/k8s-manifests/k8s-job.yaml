@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job
+  labels:
+    name: my-job
+spec:
+  # ttlSecondsAfterFinished: 100 # Job and Pod will be removed!
+  template:
+    metadata:
+      labels:
+        name: my-job
+    spec:
+      containers:
+        - name: default
+          image: busybox:latest
+          command:
+            - /bin/sh
+            - -c
+            - echo "Running at Job $(date).";
+      restartPolicy: Never
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cronjob
+  labels:
+    name: my-cronjob
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 100 # Job and Pod will be removed!
+      template:
+        metadata:
+          labels:
+            name: my-cronjob
+        spec:
+          containers:
+            - name: default
+              image: busybox:latest
+              command:
+                - /bin/sh
+                - -c
+                - echo "Running at CronJob $(date).";
+          restartPolicy: OnFailure

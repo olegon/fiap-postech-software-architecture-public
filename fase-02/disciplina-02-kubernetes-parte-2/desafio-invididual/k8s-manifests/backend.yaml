@@ -1,0 +1,172 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend
+  labels:
+    app: backend
+data:
+  REDIS_URL: redis://redis.default:6379
+  app.properties: |
+    spring.config.a=d
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+  labels:
+    app: backend
+type: Opaque
+stringData:
+  password: '123456'
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  # storageClassName: ""
+  resources:
+    requests:
+      storage: 100Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: backend
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: local/backend:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+        ports:
+          - containerPort: 3000
+        startupProbe:
+          httpGet:
+            path: /v1/health
+            port: 3000
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 20
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /v1/ready
+            port: 3000
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 5
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /v1/health
+            port: 3000
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 5
+          successThreshold: 1
+        env:
+          - name: REDIS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: backend
+                key: REDIS_URL
+          - name: APP_PORT
+            value: "3000"
+        volumeMounts:
+          - name: config
+            mountPath: /config
+            readOnly: true
+          - name: secret
+            mountPath: /secret
+            readOnly: true
+          - name: pvc
+            mountPath: /pvc
+      volumes:
+      - name: config
+        configMap:
+          # Provide the name of the ConfigMap you want to mount.
+          name: backend
+          # An array of keys from the ConfigMap to create as files
+          items:
+          - key: "app.properties"
+            path: "app.properties"
+      - name: secret
+        secret:
+          # Provide the name of the Secret you want to mount.
+          secretName: mysecret
+          # An array of keys from the ConfigMap to create as files
+          items:
+            - key: password
+              path: password.txt
+      - name: pvc
+        persistentVolumeClaim:
+          claimName: backend
+    
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+  - port: 80
+    targetPort: 3000

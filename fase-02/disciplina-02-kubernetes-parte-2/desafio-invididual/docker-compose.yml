@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - 3000:3000
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - 8080:80
+  redis:
+    image: redis:6
+    expose:
+      - 6379
